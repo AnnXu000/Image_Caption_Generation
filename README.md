@@ -25,6 +25,43 @@
 
 ### 相关问题
 
+---
+title: Image Caption Generation 相关问题
+date: 2020-04-15j
+tags: [Image Caption, AI, RNN, encoder-decoder]
+categories: 
+- 人工智能
+- 机器学习
+
+---
+
+[参考文章](https://towardsdatascience.com/image-captioning-with-keras-teaching-computers-to-describe-pictures-c88a46a311b8)
+
+<!-- more -->
+
+### Encoder-Decoder模型
+
+图片字幕生成的细节：
+
+- 模型使用的词典不在乎单词的顺序问题
+
+- 这是一个监督学习问题
+
+  - 通过输入的Xi，预测输出的Yi
+
+    ![截屏2020-04-15 下午2.33.57](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdus9eyca0j311q0h8n0h.jpg)
+
+  - 也即是给定图片向量，每次预测基于当前的部分字幕，生成下一个单词
+
+    - 输入：图片向量和当前的部分字幕（以词典中的索引表示）
+      - 将字幕转化为输入，涉及到词嵌入技术（the word embedding techniques），比如 GLOVE词嵌入模型，将每个单词都匹配为长度200（自定义）的向量
+      - 也可以单纯的只使用词典本身作为向量（在词典中存在为1，不存在为0）
+    - 预测输出：下一个单词
+
+---
+
+### 相关问题
+
 #### **Q1. What the advantages/disadvantages might be of using lemmatized vs regular tokens.**
 
 Tokenization is the process of splitting any string into words. It is an essential approach for data preparation relevant to field of language processing. In this process, there are lots of methods can be applied thus lead to different type of tokens such as lemmatized tokens and regular tokens. Lemmatization usually refers to transforming words from inflected, singular forms etc. to the base form, known as the lemma, which is an actual word in a dictionary. For example, *am*, *is*, *are* will be converted to *be*, and *runs*, *ran*, *running*, will be of *run*. During Lemmatization process, the transformation of a specific word relies on the current context, such as identifying whether the word *saw* is a noun or a verb.
@@ -41,69 +78,13 @@ In conclusion, using lemmatized tokens is usually a better option, but still com
 
 In this task, the report chooses the same two images for observing the generated caption for RNN and LSTM. Table 1 is listing the parameters which remain the same in the sampling process, including the image, the reference captions used for computing BLEU score, and the weights of BLEU for each gram. Table 2-6 are comparing the generated caption and the corresponding BLEU cumulative score between LSTM and RNN at each epoch. Noticed that the tokens <start> and <end> has been removed from generated caption.
 
+![截屏2020-04-17 下午5.07.53](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdx7qbb7ghj30rs0k6gt9.jpg)
 
+![截屏2020-04-17 下午5.08.08](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdx7qm6t9xj30s408sacl.jpg)
 
-Table 1: The same parameters when generating caption.
+![截屏2020-04-17 下午5.09.09](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdx7rl8hmhj30p808e0xv.jpg)
 
-|      Image Id      | 539705321_99406e5820.jpg                                     |
-| :----------------: | ------------------------------------------------------------ |
-|       Image        | ![手机屏幕截图  描述已自动生成](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduyeba6gpj30kj0aggwj.jpg) |
-| Reference Captions | a kid in  red falls as he struggles with a kid in white to get to a soccer ball <br />children  chasing the ball in a soccer game<br />little  boys running and chasing a soccer ball<br />the boy  with the red soccer suit is falling down while the boy in the white shirt has  his eyes on the ball <br />two teams  of children one in red and the other in white are playing soccer |
-|    BLEU Weights    | 1-gram: (1, 0, 0, 0)  <br />2-gram: (0.66, 0.33,  0, 0)  <br />3-gram: (0.6, 0.3,  0.1, 0) <br />4-gram: (0.5, 0.25,  0.15, 0.1) |
-
-
-
-Table 2: BLEU cumulative score for n-gram on LSTM and RNN at 1st epoch.
-
-|     1st Epoch     |                                                              |                                                              |
-| :---------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-|                   |                             LSTM                             |                             RNN                              |
-| Generated Caption | a man in a red shirt and a red shirt and a  woman in a red shirt and a | a young girl in a red shirt and a white shirt  and a white shirt and a white shirt |
-|    BLEU Score     | ![手机屏幕截图  描述已自动生成](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduye9r4a1j30fc040aan.jpg) | ![手机屏幕截图  描述已自动生成](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduye7tkewj30fe03wjrz.jpg) |
-
-
-
-Table 3: BLEU cumulative score for n-gram on LSTM and RNN at 2nd epoch.
-
-|     2nd Epoch     |                                                              |                                                              |
-| :---------------: | :----------------------------------------------------------: | ------------------------------------------------------------ |
-|                   |                             LSTM                             | RNN                                                          |
-| Generated Caption |            a group of children playing in a field            | two girls are playing in a field                             |
-|    BLEU Score     | ![手机屏幕截图  描述已自动生成](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduyec0ufyj30fg03yq3j.jpg) | ![手机屏幕截图  描述已自动生成](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduye4j63ij30fk03u74w.jpg) |
-
- 
-
-Table 4: BLEU cumulative score for n-gram on LSTM and RNN at 3rd epoch.
-
-|     3rd Epoch     |                                                              |                                                              |
-| :---------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-|                   |                             LSTM                             |                             RNN                              |
-| Generated Caption |       a group of people are playing soccer on a  field       |            two soccer players are playing soccer             |
-|    BLEU Score     | ![手机屏幕截图  描述已自动生成](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduyecm1ecj30bz02y0t7.jpg) | ![手机屏幕截图  描述已自动生成](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduye1an4bj30fi03yjrz.jpg) |
-
- 
-
-Table 5: BLEU cumulative score for n-gram on LSTM and RNN at 4th epoch.
-
-|     4th Epoch     |                                                              |                                                              |
-| :---------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-|                   |                             LSTM                             |                             RNN                              |
-| Generated Caption | a boy in a red shirt and a baseball cap is  running on a grassy field |                three children play in a field                |
-|    BLEU Score     | ![手机屏幕截图  描述已自动生成](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduye2alcej30d303aaan.jpg) | ![手机屏幕截图  描述已自动生成](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduyeam4bnj30fc03smxr.jpg) |
-
- 
-
-Table 6: BLEU cumulative score for n-gram on LSTM and RNN at 5th epoch.
-
-
-
-|     5th Epoch     |                                                              |                                                              |
-| :---------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-|                   |                             LSTM                             |                             RNN                              |
-| Generated Caption | a boy in a red shirt is running with a soccer  ball in a field of grass |     three children are playing soccer on a grassy  field     |
-|    BLEU Score     | ![手机屏幕截图  描述已自动生成](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduye1p276j30fc03ywf3.jpg) | ![手机屏幕截图  描述已自动生成](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduye8r05jj30fg03ugm7.jpg) |
-
-
+![截屏2020-04-17 下午5.09.27](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdx7rxx5xuj30rq0qkn56.jpg)
 
 #### **Q3. Compare training using an RNN vs LSTM for the decoder network.**
 
@@ -154,7 +135,7 @@ Figure 2: All of Cumulative BLEU scores and the average of scores on test set fo
 
 
 
-Table 10 is comparing the results between images with the longest reference captions and shortest captions on average in the test set. For the image with the longest reference captions, although the 1-gram BLEU score for LSTM is slightly lower than that for RNN, the other three type of cumulative BLEU scores, from 2-gram to 4-gram, are all higher. And for the image with the shortest one, all of the BLEU scores when using LSTM to train the decoder are higher than using RNN. However, if we compare the generated captions in a human perspective, it is obvious that all of them are misdescribing the corresponding images at the same point thus do not show much difference for people. 
+Table 10 is comparing the results between images with the longest reference captions and shortest captions on average in the test set. For the image with the longest reference captions, although the 1-gram BLEU score for LSTM is slightly lower than that for RNN, the other three type of cumulative BLEU scores, from 2-gram to 4-gram, are all higher. And for the image with the shortest one, all of the BLEU scores when using LSTM to train the decoder are higher than using RNN. However, if we compare the generated captions in a human perspective, it is obvious that all of them are misdescribing the corresponding images at the same point thus do not show much difference for people.  Table 11 is showing three randomly chosen samples, giving clues that the performance of LSTM and RNN are unstable and not always giving similar scores.
 
 We compare the loss of LSTM decoder and RNN decoder, during the training epoch on the training set and after finish training on the test set, as well as the cumulative BLEU scores on the generated captions, on average and on both the longest and the shortest reference captions. In conclusion, the difference between Loss and BLEU score in overall may indicate that LSTM may have a better performance than RNN. But with human perception, it is hard to judge which is better. And the LSTM does not show its advantages in dealing with long captions. However, this insight may not obvious and convincing enough in this case as the training set, length of the captions and training epochs seem quite constrained.
 
@@ -163,6 +144,8 @@ We compare the loss of LSTM decoder and RNN decoder, during the training epoch o
 Table 10: Comparing the images with long (left) or short (right) reference captions on average in test set.
 
 ![截屏2020-04-15 下午6.21.38](https://tva1.sinaimg.cn/large/007S8ZIlgy1gduyncvc1mj30u00vu454.jpg) 
+
+![截屏2020-04-17 下午5.10.09](https://tva1.sinaimg.cn/large/007S8ZIlgy1gdx7svcdz8j30ru13u4by.jpg)
 
 #### **Q4. Among the text annotations files downloaded with the Flickr8k dataset are two files we did not use: ExpertAnnotations.txt and CrowdFlowerAnnotations.txt. Read the readme.txt to understand their contents, then consider and discuss how these might be incorporated into evaluating your models.**
 
@@ -179,4 +162,5 @@ For example, when converting the words to the vector at the decoder step, we can
 Reference:
 
 [1] M. Hodosh, P. Young, and J. Hockenmaier. Framing image description as a ranking task: Data, models and evaluation metrics. J. Artif. Int. Res., 47(1):853–899, May 2013.
+
 
