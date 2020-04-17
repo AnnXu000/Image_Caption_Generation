@@ -25,19 +25,7 @@
 
 ### 相关问题
 
----
-title: Image Caption Generation 相关问题
-date: 2020-04-15j
-tags: [Image Caption, AI, RNN, encoder-decoder]
-categories: 
-- 人工智能
-- 机器学习
-
----
-
 [参考文章](https://towardsdatascience.com/image-captioning-with-keras-teaching-computers-to-describe-pictures-c88a46a311b8)
-
-<!-- more -->
 
 ### Encoder-Decoder模型
 
